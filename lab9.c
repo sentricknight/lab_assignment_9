@@ -7,17 +7,18 @@ struct RecordType
 	char	name;
 	int		order; 
 };
+#define HASH_SIZE == 10
 
 // Fill out this structure
 struct HashType
 {
-
+	 struct RecordType *pRecord;
 };
 
 // Compute the hash function
 int hash(int x)
 {
-
+    return x % 100;
 }
 
 // parses input file to an integer array
@@ -75,20 +76,48 @@ void printRecords(struct RecordType pData[], int dataSz)
 // index x -> id, name, order -> id, name, order ....
 void displayRecordsInHash(struct HashType *pHashArray, int hashSz)
 {
-	int i;
+    int i, j;
 
-	for (i=0;i<hashSz;++i)
-	{
-		// if index is occupied with any records, print all
-	}
+    for (i=0; i < hashSz; ++i)
+    {
+        if (pHashArray[i].pRecord != NULL)
+        {
+            printf("Index %d -> ", i);
+
+            for (j=0; j < hashSz; ++j)
+            {
+                if (pHashArray[i+j].pRecord != NULL)
+                {
+                    printf("%d %c %d -> ", pHashArray[i+j].pRecord->id, pHashArray[i+j].pRecord->name, pHashArray[i+j].pRecord->order);
+                }
+            }
+
+            printf("\n");
+        }
+    }
 }
 
 int main(void)
 {
-	struct RecordType *pRecords;
-	int recordSz = 0;
+    struct RecordType *pRecords;
+    struct HashType *pHashTable;
+    int recordSz = 0, hashSz = 100, i, j;
 
-	recordSz = parseData("input.txt", &pRecords);
-	printRecords(pRecords, recordSz);
-	// Your hash implementation
+    recordSz = parseData("input.txt", &pRecords);
+    printRecords(pRecords, recordSz);
+
+    pHashTable = (struct HashType*) malloc(sizeof(struct HashType) * hashSz);
+
+    if (pHashTable == NULL)
+    {
+        printf("Cannot allocate memory\n");
+        exit(-1);
+    }
+
+    for (i=0; i < hashSz; ++i)
+    {
+        pHashTable[i].pRecord = NULL;
+    }
+
+    for (i=0; i < recordSz;
 }
